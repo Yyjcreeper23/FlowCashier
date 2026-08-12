@@ -7,7 +7,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],    # Vite server
-    allow_methods=["*"],
+    allow_methods=["*"],                        # TODO: Revisit later to limit allowed methods
     allow_headers=["*"]
 )
 

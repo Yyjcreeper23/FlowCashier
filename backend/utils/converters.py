@@ -1,31 +1,39 @@
-from constants import DATE_FORMAT
-from datetime import datetime
-from recurring_freqs import RecurringFrequency
+from datetime import date
 
-def to_datetime(input_str: str) -> datetime:
+from .constants import DATE_FORMAT, DEFAULT_DATE_ON_CONVERSION_FAIL, DEFAULT_DATE_STR_ON_CONVERSION_FAIL
+from .recurring_freqs import RecurringFrequency
+
+
+def to_date(input_str: str) -> date:
     """
-    Converts a string to a datetime object. Case insensitive. Ignores leading and trailing whitespaces.
+    Converts a string to a date object. Case insensitive. Ignores leading and trailing whitespaces.
 
     Attributes:
         input_str: Input string, must ideally be of %d-%m-%Y aka DD-MM-YYYY format
 
     Returns:
-        A datetime object parsed from input_str.
+        A date object parsed from input_str. DEFAULT_DATE by default if conversion is unsuccessful.
     """
-    return datetime.strptime(input_str.lower().strip(), DATE_FORMAT)
+    try:
+        return date.strptime(input_str.lower().strip(), DATE_FORMAT)
+    except:
+        return DEFAULT_DATE_ON_CONVERSION_FAIL
 
 
-def from_datetime(input_dt: datetime) -> str:
+def from_date(input_dt: date) -> str:
     """
-    Converts a string to a datetime object. Case insensitive. Ignores leading and trailing whitespaces.
+    Converts a date object to a string.
 
     Attributes:
-        input_str: Input string, must ideally be of %d-%m-%Y aka DD-MM-YYYY format
+        input_dt: Input date object
 
     Returns:
-        A datetime object parsed from input_str.
+        A string equal to input_dt's string value in DATE_FORMAT format. DEFAULT_DATE_STR by default if conversion is unsuccessful.
     """
-    return datetime.strftime(input_dt, DATE_FORMAT)
+    try:
+        return date.strftime(input_dt, DATE_FORMAT)
+    except:
+        return DEFAULT_DATE_STR_ON_CONVERSION_FAIL
 
 
 def to_recurring_freq(input_str: str) -> RecurringFrequency:

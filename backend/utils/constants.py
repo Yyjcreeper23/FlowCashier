@@ -1,1 +1,21 @@
+"""
+Constants used across the application.
+"""
+
+from datetime import date
+
+from .recurring_freqs import RecurringFrequency
+
+
 DATE_FORMAT = "%d-%m-%Y"
+
+DEFAULT_DATE_ON_CONVERSION_FAIL = date(2000, 1, 1)
+DEFAULT_DATE_STR_ON_CONVERSION_FAIL = "01-01-2000"
+
+DEFAULT_TRANSACTION_NAME = "Default Transaction Name"
+DEFAULT_TRANSACTION_AMOUNT = 0.0
+DEFAULT_TRANSACTION_DATE = date(2000, 1, 1)
+DEFAULT_TRANSACTION_RECURRING_FREQ = RecurringFrequency.ONE_TIME
+
+DEFAULT_FORECAST_STARTING_BALANCE = 0.0
+DEFAULT_FORECAST_MONTH_STR = "2000-01"

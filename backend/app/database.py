@@ -17,15 +17,6 @@ def create_db_and_tables():
     """
     SQLModel.metadata.create_all(engine)
 
-    # Add default seed rows if database is empty
-    # NOTE: Remove when app is complete
-    with Session(engine) as session:
-        has_any_rows = session.exec(select(Transaction).limit(1)).first() is not None
-        if not has_any_rows:
-            for transaction in example_transactions:
-                session.add(transaction)
-            session.commit()
-
 def get_session():
     """
     Yields a session object (should be used with Depends[])

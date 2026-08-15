@@ -9,7 +9,7 @@ def to_date(input_str: str) -> date:
     Converts a string to a date object. Case insensitive. Ignores leading and trailing whitespaces.
 
     Attributes:
-        input_str: Input string, must ideally be of %d-%m-%Y aka DD-MM-YYYY format
+        input_str: Input string, must be of %d-%m-%Y aka DD-MM-YYYY format
 
     Returns:
         A date object parsed from input_str. DEFAULT_DATE by default if conversion is unsuccessful.
@@ -47,15 +47,15 @@ def to_recurring_freq(input_str: str) -> RecurringFrequency:
         A RecurringFrequency object parsed from input_str. RecurringFrequency.ONE_TIME by default if parse is unsuccessful.
     """
     match input_str.lower().strip():
-        case RecurringFrequency.ONE_TIME.value.lower():
+        case "one time":
             return RecurringFrequency.ONE_TIME
-        case RecurringFrequency.DAILY.value.lower():
+        case "daily":
             return RecurringFrequency.DAILY
-        case RecurringFrequency.WEEKLY.value.lower():
+        case "weekly":
             return RecurringFrequency.WEEKLY
-        case RecurringFrequency.MONTHLY.value.lower():
+        case "monthly":
             return RecurringFrequency.MONTHLY
-        case RecurringFrequency.YEARLY.value.lower():
+        case "yearly":
             return RecurringFrequency.YEARLY
         case _:
             return RecurringFrequency.ONE_TIME

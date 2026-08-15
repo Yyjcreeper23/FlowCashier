@@ -85,11 +85,11 @@ class ForecastRequest(BaseModel):
 
     Attributes:
         starting_balance: Float representing the starting balance of that month
-        transactions: List of Transactions representing all transactions of that month
+        transactions: List of TransactionPublic's representing all transactions of that month
         month: String that represents the target month, format should be YYYY-MM, e.g. '2026-08'
     """
     starting_balance: float = Field(default=DEFAULT_FORECAST_STARTING_BALANCE)
-    transactions: list[Transaction]
+    transactions: list[TransactionPublic]
     month: str = Field(default=DEFAULT_FORECAST_MONTH_STR, description="Target month as YYYY-MM, e.g. '2026-08")
 
 
@@ -101,9 +101,13 @@ class ForecastResponse(BaseModel):
         balances: Dictionary representing the projected balance at the end of each day in the month
         lowest_balance: Float representing the lowest balance during the month
         lowest_balance_date: String representing the date when the lowest balance occurred
+        highest_balance: Float representing the lowest balance during the month
+        highest_balance_date: String representing the date when the highest balance occurred
         month: String representing the target month, format should be YYYY-MM, e.g. '2026-08'
     """
     balances: dict[str, float]
     lowest_balance: float
     lowest_balance_date: str
+    highest_balance: float
+    highest_balance_date: str
     month: str

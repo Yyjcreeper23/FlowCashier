@@ -7,7 +7,7 @@ from app.models import Transaction, TransactionPublic, TransactionBase, Transact
 
 router = APIRouter(
     prefix="/api",
-    tags=["transactions"]
+    tags=["transaction"]
 )
 
 # ===========================================================================

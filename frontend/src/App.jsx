@@ -210,6 +210,8 @@ export default function App() {
     }
   }
 
+  // Not used for now
+  // TODO: Implement in the future
   async function updateTransaction(tr_id) {
     setUpdateLoading(true);
     setUpdateError(null);

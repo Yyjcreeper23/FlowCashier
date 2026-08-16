@@ -1,8 +1,5 @@
 from pathlib import Path
-from sqlmodel import create_engine, Session, SQLModel, select
-
-from app.example_transactions import example_transactions
-from app.models import Transaction
+from sqlmodel import create_engine, Session, SQLModel
 
 
 # Path to the directory containing this file

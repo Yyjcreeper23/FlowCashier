@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, useRef } from "react";
+import { useCallback, useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import CurrencyInput from "./CurrencyInput";
 import "react-calendar/dist/Calendar.css";

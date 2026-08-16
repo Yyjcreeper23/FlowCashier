@@ -422,7 +422,7 @@ export default function App() {
             <input
               type="number"
               step="0.01"
-              placeholder="Amount  (+ income / - expense)"
+              placeholder="Amount  (- for expenses)"
               value={form.amount}
               onChange={(e) => setForm({ ...form, amount: e.target.value })}
               required

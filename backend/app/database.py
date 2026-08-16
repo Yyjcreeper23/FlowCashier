@@ -17,6 +17,7 @@ def create_db_and_tables():
 def get_session():
     """
     Yields a session object (should be used with Depends[])
+    Serves as the connection point to the database
     """
     with Session(engine) as session:
         yield session

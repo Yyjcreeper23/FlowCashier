@@ -17,8 +17,8 @@ const RECURRING_OPTIONS = [
 
 const EMPTY_FORM = {
   name: "",
-  amount: "",
-  date: "",
+  amount: "0",
+  date: todayDate(),
   recurring_freq: "One Time",
 };
 
@@ -29,6 +29,11 @@ const EMPTY_FORM = {
 function todayMonthString() {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+}
+
+function todayDate() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 }
 
 function toDateKey(date) {
@@ -79,6 +84,7 @@ export default function App() {
 
   // Add-transaction form state
   const [form, setForm] = useState(EMPTY_FORM);
+  const [isExpense, setIsExpense] = useState(false);
   const [addLoading, setAddLoading] = useState(false);
   const [addError, setAddError] = useState(null);
 
@@ -160,6 +166,8 @@ export default function App() {
     e.preventDefault();
     if (!form.name || !form.amount || !form.date) return;
 
+    const amount = Math.abs(Number(form.amount));
+
     setAddLoading(true);
     setAddError(null);
     try {
@@ -168,7 +176,7 @@ export default function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: form.name,
-          amount: Number(form.amount),
+          amount: isExpense ? -amount : amount,
           date: form.date,
           recurring_freq: form.recurring_freq,
         }),
@@ -213,6 +221,7 @@ export default function App() {
   // Not used for now
   // TODO: Implement in the future
   async function updateTransaction(tr_id) {
+    const amount = Math.abs(Number(updateForm.amount));
     setUpdateLoading(true);
     setUpdateError(null);
 
@@ -222,7 +231,7 @@ export default function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: updateForm.name,
-          amount: Number(updateForm.amount),
+          amount: isExpense ? -amount : amount,
           date: updateForm.date,
           recurring_freq: updateForm.recurring_freq,
         }),
@@ -353,6 +362,7 @@ export default function App() {
               id="starting-balance"
               type="number"
               value={startingBalance}
+              step={0.01}
               onChange={(e) => setStartingBalance(e.target.value)}
             />
           </label>
@@ -361,7 +371,7 @@ export default function App() {
           )}
 
           <label className="field">
-            Month (YYYY-MM, e.g. 2026-08)
+            Forecast Month
             <input
               id="forecast-month"
               type="month"
@@ -379,9 +389,9 @@ export default function App() {
           {/* -- Transaction list -- */}
           <h3>Transactions</h3>
 
-          {txLoading && <p className="muted-text">Loading</p>}
+          {txLoading && <p className="muted-text">Loading...</p>}
           {txError && <p className="error">{txError}</p>}
-          {!txLoading && transactions.length === 0 && (
+          {!txLoading && !txError && transactions.length === 0 && (
             <p className="muted-text">No transactions yet. Add one below.</p>
           )}
 
@@ -412,39 +422,69 @@ export default function App() {
           {/* -- Add form -- */}
           <h3>Add Transaction</h3>
           <form className="add-form" onSubmit={addTransaction}>
-            <input
-              id="tx-name"
-              placeholder="Name (e.g. Rent)"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              required
-            />
-            <input
-              type="number"
-              step="0.01"
-              placeholder="Amount  (- for expenses)"
-              value={form.amount}
-              onChange={(e) => setForm({ ...form, amount: e.target.value })}
-              required
-            />
-            <input
-              type="date"
-              value={form.date}
-              onChange={(e) => setForm({ ...form, date: e.target.value })}
-              required
-            />
-            <select
-              value={form.recurring_freq}
-              onChange={(e) =>
-                setForm({ ...form, recurring_freq: e.target.value })
-              }
-            >
-              {RECURRING_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
+            <label className="field">
+              Name
+              <input
+                placeholder="Name (e.g. Rent)"
+                title="Please input the name of your transaction"
+                value={form.name ?? ""}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                required
+              />
+            </label>
+            <label className="field">
+              Amount
+              <input
+                type="number"
+                placeholder="Amount  (e.g. 12.34)"
+                title="Please input the value of your transaction"
+                value={form.amount ?? ""}
+                min={0}
+                step={0.01}
+                onChange={(e) => setForm({ ...form, amount: e.target.value })}
+                required
+              />
+            </label>
+            <label className="field">
+              Start Date
+              <input
+                type="date"
+                title="Please input the date of your transaction"
+                value={form.date ?? ""}
+                onChange={(e) => setForm({ ...form, date: e.target.value })}
+                required
+              />
+            </label>
+            <label className="field">
+              Frequency
+              <select
+                value={form.recurring_freq ?? ""}
+                onChange={(e) =>
+                  setForm({ ...form, recurring_freq: e.target.value })
+                }
+              >
+                {RECURRING_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="expense-container">
+              <label className="field">
+                Is Expense?
+              </label>
+              <div className="checkbox-wrapper">
+                <input
+                  type="checkbox"
+                  className="custom"
+                  checked={isExpense}
+                  onChange={(e) => {
+                    setIsExpense(e.target.checked);
+                  }}
+                />
+              </div>
+            </div>
             <button
               id="add-transaction-btn"
               type="submit"
